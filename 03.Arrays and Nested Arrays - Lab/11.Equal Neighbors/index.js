@@ -15,4 +15,3 @@ function equalNeighbors(){
     }
     return counter;
 }
-console.log(equalNeighbors([['2', '2', '5', '7', '4'],
