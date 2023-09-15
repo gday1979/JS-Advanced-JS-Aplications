@@ -1,18 +1,18 @@
 function solve() {
-  const input = document.getElementById('input').value;
-  const sentences = input.split('.').filter(sentence => sentence.trim().length > 0);
-  let output = '';
-  if (sentences.length <= 3) {
-    output = `<p>${sentences.join('. ')}</p>`;
-  } else {
-    for (let i = 0; i < sentences.length; i += 3) {
-      const paragraph = sentences.slice(i, i + 3).join('. ');
-      output += `<p>${paragraph}</p>`;
-    }
-    if (sentences.length % 3 === 1) {
-      const lastParagraph = output.slice(output.lastIndexOf('<p>') + 3, output.lastIndexOf('</p>'));
-      output = output.slice(0, output.lastIndexOf('<p>')) + lastParagraph + '</p>';
-    }
+
+  let input = document.getElementById("input").value;
+  // Взимаме инпута и неговата стойност като променлива 
+  let output = document.getElementById("output");
+  // Взимаме outputa като променлива по id 
+
+  let sentences = input.split(".").filter((s) => s.length !== 0);
+  // Изваждаме изреченията от инпута като ги делим по точка и ги филтрираме, за да нямаме празни изречения 
+
+  while (sentences.length > 0) {                                  // Докато има изреченията въртим цикъл 
+    let textParagraph = sentences.splice(0, 3).join(". ") + ".";  
+    // Нашият текст в параграфа ще е максимум 3 изречения като ги съединяваме по точка и интервал и добавяме точка накрая 
+    let p = document.createElement("p");    // създаваме си параграф с createElement и посочваме какъв вид да е в скобите 
+    p.textContent = textParagraph;          // Съдържанието на параграфа ще е това, което сме получили от текста 
+    output.appendChild(p);                  // на outputa създаваме дете с получения параграф 
   }
-  document.getElementById('output').innerHTML = output;
 }

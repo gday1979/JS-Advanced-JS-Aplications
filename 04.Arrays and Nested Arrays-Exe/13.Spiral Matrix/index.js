@@ -1,46 +1,41 @@
-function spiralMatrix(){
-    let n = 5;
-    let matrix = [];
-    for (let i = 0; i < n; i++) {
-        matrix.push([]);
-        for (let j = 0; j < n; j++) {
-            matrix[i].push(0);
-        }
+function spiralMatrix(row, col) {
+
+    let result = [];
+    for (let i = 0; i < row; i++) {
+        result.push([]);
     }
 
-    let row = 0;
-    let col = 0;
-    let direction = 'right';
-    for (let i = 1; i <= n * n; i++) {
-        matrix[row][col] = i;
-        if (direction === 'right') {
-            col++;
-        } else if (direction === 'down') {
-            row++;
-        } else if (direction === 'left') {
-            col--;
-        } else if (direction === 'up') {
-            row--;
+    let startCol = 0;
+    let endCol = col - 1;
+    let startRow = 0;
+    let endRow = row - 1;
+    let counter = 1;
+    while (startCol <= endCol && startRow <= endRow) {
+        
+        for (let i = startCol; i <= endCol; i++) {
+            result[startRow][i] = counter;
+            counter++;
         }
+        startRow++;
 
-        if (direction === 'right' && (col > n - 1 || matrix[row][col] !== 0)) {
-            direction = 'down';
-            col--;
-            row++;
-        } else if (direction === 'down' && (row > n - 1 || matrix[row][col] !== 0)) {
-            direction = 'left';
-            row--;
-            col--;
-        } else if (direction === 'left' && (col < 0 || matrix[row][col] !== 0)) {
-            direction = 'up';
-            col++;
-            row--;
-        } else if (direction === 'up' && (row < 0 || matrix[row][col] !== 0)) {
-            direction = 'right';
-            row++;
-            col++;
+        for (let i = startRow; i <= endRow; i++) {
+            result[i][endCol] = counter;
+            counter++;
         }
+        endCol--;
+
+        for (let i = endCol; i >= startCol; i--) {
+            result[endRow][i] = counter;
+            counter++;
+        }
+        endRow--;
+
+        for (let i = endRow; i >= startRow; i--) {
+            result[i][startCol] = counter;
+            counter++;
+        }
+        startCol++;
     }
 
-    matrix.forEach(row => console.log(row.join(' ')));
+    result.forEach((row) => console.log(row.join(" ")));
 }

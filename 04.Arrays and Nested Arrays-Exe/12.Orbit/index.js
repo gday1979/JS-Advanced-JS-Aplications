@@ -1,34 +1,19 @@
-function orbit(){
-    let [rows, cols, x, y] = [...arguments];
+function orbit(input) {
+
+    let [rows, cols, starRow, starCol] = input
     let matrix = [];
+    
     for (let i = 0; i < rows; i++) {
         matrix.push([]);
-        for (let j = 0; j < cols; j++) {
-            matrix[i].push(0);
+    }
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            matrix[row][col] = Math.max(Math.abs(row - starRow), Math.abs(col - starCol)) + 1;
         }
     }
-    matrix[x][y] = 1;
-    let num = 1;
-    let counter = 1;
-    while (true) {
-        let isFilled = false;
-        for (let i = x - counter; i <= x + counter; i++) {
-            for (let j = y - counter; j <= y + counter; j++) {
-                if (i >= 0 && i < rows && j >= 0 && j < cols) {
-                    if (matrix[i][j] === 0) {
-                        matrix[i][j] = num + 1;
-                        isFilled = true;
-                    }
-                }
-            }
-        }
-        if (!isFilled) {
-            break;
-        }
-        num++;
-        counter++;
-    }
-    matrix.forEach(row => console.log(row.join(' ')));
+
+    console.log(matrix.map(row => row.join(" ")).join("\n"));
 }
 orbit(4, 4, 0, 0);
 orbit(5, 5, 2, 2);

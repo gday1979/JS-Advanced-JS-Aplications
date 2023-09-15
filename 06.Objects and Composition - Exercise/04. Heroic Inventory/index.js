@@ -1,12 +1,15 @@
-function heroicInventory(input){
-    let result=[];
-    for(let i=0; i<input.length;i++){
-        let [name,level,items]=input[i].split(' / ');
-        level=Number(level);
-        items=items.split(', ');
-        result.push({name,level,items});
-    }
-    console.log(JSON.stringify(result));
+function heroicInventory(array) {
+    
+    let heroes = [];
 
+    for (let line of array) {
+        let [name, level, items] = line.split(" / ");
+        level = Number(level);
+        items = items ? items.split(", ") : [];
+
+        heroes.push({ name, level, items });
+    }
+
+    console.log(JSON.stringify(heroes));
 }
 heroicInventory(['Isacc / 25 / Apple, GravityGun','Derek / 12 / BarrelVest, DestructionSword','Hes / 1 / Desolator, Sentinel, Antara']);
