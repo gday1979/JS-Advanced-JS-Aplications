@@ -1,9 +1,12 @@
-function sortArray(arr, order) {
-  if (order === 'asc') {
-    return arr.sort((a, b) => a - b);
-  } else if (order === 'desc') {
-    return arr.sort((a, b) => b - a);
-  } else {
-    return arr;
-  }
+function areaAndVolumeCalculator(area, vol, input) {
+    let figures = JSON.parse(input);
+
+    let result = figures.map(figure => {
+        return {
+            area: area.call(figure),
+            volume: vol.call(figure)
+        }
+    });
+
+    return result;
 }
