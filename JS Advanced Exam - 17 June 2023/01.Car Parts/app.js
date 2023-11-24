@@ -1,103 +1,151 @@
 window.addEventListener('load', solve);
 
-function solution() {
-  const carModelInput = document.getElementById('model');
-  const carYearInput = document.getElementById('year');
-  const partNameInput = document.getElementById('part-name');
-  const partNumberInput = document.getElementById('part-number');
-  const partConditionInput = document.getElementById('part-condition');
-  const nextBtn = document.getElementById('add-btn');
-  const editBtn = document.getElementById('edit-btn');
-  const continueBtn = document.getElementById('continue-btn');
-  const confirmBtn = document.getElementById('confirm-btn');
-  const cancelBtn = document.getElementById('cancel-btn');
-  const infoList = document.querySelector('.info-list');
-  const confirmList = document.querySelector('.confirm-list');
-  const completeImg = document.getElementById('complete-img');
-  const completeText = document.getElementById('complete-text');
+function solve() {
+    const carModelElement = document.getElementById('car-model');
+    const carYearElement = document.getElementById('car-year');
+    const partNameElement=document.getElementById('part-name');
+    const partNumberElement=document.getElementById('part-number');
+    const conditionElement=document.getElementById('condition');
 
-  nextBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (
-      carModelInput.value !== '' &&
-      carYearInput.value >= 1980 &&
-      carYearInput.value <= 2023 &&
-      partNameInput.value !== '' &&
-      partNumberInput.value !== '' &&
-      partConditionInput.value !== ''
-    ) {
-      const listItem = document.createElement('li');
-      listItem.textContent = `Car model: ${carModelInput.value}
-      Car year: ${carYearInput.value}
-      Part name: ${partNameInput.value}
-      Part number: ${partNumberInput.value}
-      Condition: ${partConditionInput.value}`;
-      infoList.appendChild(listItem);
-      carModelInput.value = '';
-      carYearInput.value = '';
-      partNameInput.value = '';
-      partNumberInput.value = '';
-      partConditionInput.value = '';
-      nextBtn.disabled = true;
-      editBtn.style.display = 'inline-block';
-      continueBtn.style.display = 'inline-block';
-      completeImg.style.visibility = 'hidden';
-      completeText.textContent = '';
+    const nextButtonElement = document.getElementById('next-btn');
+
+    nextButtonElement.addEventListener('click', next);
+
+    function next(e) {
+      e.preventDefault();
+
+      const carModel = carModelElement.value;
+      const carYear = carYearElement.value;
+      const partName=partNameElement.value;
+      const partNumber=partNumberElement.value;
+      const condition=conditionElement.value;
+
+      if (
+        carModel.trim() === "" ||
+        isNaN(carYear) ||
+        carYear < 1980 ||
+        carYear > 2023 ||
+        partName.trim() === "" ||
+        partNumber.trim() === "" ||
+        condition.trim() === ""
+      ) {
+        return;
+      }
+
+      const ulInfoListElement = document.querySelector('.info-list');
+
+      const liElement = document.createElement('li');
+      liElement.classList.add('part-content');
+
+      const articleElement = document.createElement('article');
+      const pCarModelElement = document.createElement('p');
+      pCarModelElement.textContent = `Model: ${carModel}`;
+
+      const pCarYearElement = document.createElement('p');
+      pCarYearElement.textContent = `Year: ${carYear}`;
+
+      const pPartNameElement = document.createElement('p');
+      pPartNameElement.textContent = `Name: ${partName}`;
+
+      const pPartNumberElement = document.createElement('p');
+      pPartNumberElement.textContent = `Number: ${partNumber}`;
+
+      const pConditionElement = document.createElement('p');
+      pConditionElement.textContent = `Condition: ${condition}`;
+
+      const editButton = document.createElement('button');
+      editButton.classList.add('edit-btn');
+      editButton.textContent = 'Edit';
+
+      const continueButton = document.createElement('button');
+      continueButton.classList.add('continue-btn');
+      continueButton.textContent = 'Continue';
+
+      articleElement.appendChild(pCarModelElement);
+      articleElement.appendChild(pCarYearElement);
+      articleElement.appendChild(pPartNameElement);
+      articleElement.appendChild(pPartNumberElement);
+      articleElement.appendChild(pConditionElement);
+
+      liElement.appendChild(articleElement);
+      liElement.appendChild(editButton);
+      liElement.appendChild(continueButton);
+
+      ulInfoListElement.appendChild(liElement);
+
+      carModelElement.value = '';
+      carYearElement.value = '';
+      partNameElement.value='';
+      partNumberElement.value='';
+      conditionElement.value='';
+
+      editButton.addEventListener('click', edit);
+
+      nextButtonElement.disabled = true;
+
+      function edit(){
+        carModelElement.value=carModel;
+        carYearElement.value=carYear;
+        partNameElement.value=partName;
+        partNumberElement.value=partNumber;
+        conditionElement.value=condition;
+
+        liElement.remove();
+        nextButtonElement.disabled = false;
+      }
+      continueButton.addEventListener('click', continueFunction);
+
+      function continueFunction(){
+        const ulConfirmListElement = document.querySelector(".confirm-list");
+
+        editButton.classList.remove("edit-btn");
+        editButton.classList.add("confirm-btn");
+        editButton.textContent = "Confirm";
+
+        continueButton.classList.remove("continue-btn");
+        continueButton.classList.add("cancel-btn");
+        continueButton.textContent = "Cancel";
+
+        ulConfirmListElement.appendChild(liElement);
+
+        const h1VerificationElement = document.querySelector("#verification");
+
+        editButton.addEventListener("click", confirm);
+
+
+
+        function confirm(){
+          liElement.remove();
+          editButton.disabled = false;
+          h1VerificationElement.add("confirm-order");
+          h1VerificationElement.textContent = "Confirmed.";
+
+          carModelElement.value = "";
+          carYearElement.value = "";
+          partNameElement.value="";
+          partNumberElement.value="";
+          conditionElement.value="";
+
+
+        }
+        continueButton.addEventListener('click', cancel);
+        function cancel(){
+          liElement.remove();
+          nextButton.disabled = false;
+          h1VerificationElement.add("cancel-order");
+          h1VerificationElement.textContent = "Canceled.";
+
+          carModelElement.value = "";
+          carYearElement.value = "";
+          partNameElement.value="";
+          partNumberElement.value="";
+          conditionElement.value="";
+        }
+
+
+      }
+
     }
-  });
-
-  editBtn.addEventListener('click', function() {
-    const listItem = infoList.lastElementChild;
-    const values = listItem.textContent.split('\n');
-    carModelInput.value = values[0].split(': ')[1];
-    carYearInput.value = values[1].split(': ')[1];
-    partNameInput.value = values[2].split(': ')[1];
-    partNumberInput.value = values[3].split(': ')[1];
-    partConditionInput.value = values[4].split(': ')[1];
-    listItem.remove();
-    nextBtn.disabled = false;
-    editBtn.style.display = 'none';
-    continueBtn.style.display = 'none';
-  });
-
-  continueBtn.addEventListener('click', function() {
-    const listItem = infoList.lastElementChild;
-    const values = listItem.textContent.split('\n');
-    const confirmListItem = document.createElement('li');
-    confirmListItem.textContent = `New part:
-      Car model: ${values[0].split(': ')[1]}
-      Car year: ${values[1].split(': ')[1]}
-      Part name: ${values[2].split(': ')[1]}
-      Part number: ${values[3].split(': ')[1]}
-      Condition: ${values[4].split(': ')[1]}
-      `;
-    const confirmBtnsDiv = document.createElement('div');
-    confirmBtnsDiv.classList.add('actions');
-    const confirmBtn = document.createElement('button');
-    confirmBtn.textContent = 'Confirm';
-    confirmBtn.classList.add('button');
-    confirmBtn.addEventListener('click', function() {
-      confirmListItem.remove();
-      nextBtn.disabled = false;
-      completeImg.style.visibility = 'visible';
-      completeText.textContent = 'Part is Ordered!';
-    });
-    const cancelBtn = document.createElement('button');
-    cancelBtn.textContent = 'Cancel';
-    cancelBtn.classList.add('button');
-    cancelBtn.addEventListener('click', function() {
-      confirmListItem.remove();
-      nextBtn.disabled = false;
-    });
-    confirmBtnsDiv.appendChild(confirmBtn);
-    confirmBtnsDiv.appendChild(cancelBtn);
-    confirmListItem.appendChild(confirmBtnsDiv);
-    confirmList.appendChild(confirmListItem);
-    listItem.remove();
-    nextBtn.disabled = false;
-    editBtn.style.display = 'none';
-    continueBtn.style.display = 'none';
-  });
 }
 
 
